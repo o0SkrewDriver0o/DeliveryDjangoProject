@@ -1,0 +1,101 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block admin_change_form_document_ready %}
+    {{ block.super }}
+
+    <!-- Ваш JavaScript код для настройки страницы редактирования -->
+    <script>
+        // Здесь вы можете добавить свой JavaScript код
+    </script>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+
+    <!-- Ваш HTML код для настройки страницы редактирования -->
+
+    {% if opts.model_name == 'restaurant' %}
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <canvas id="reviewStatsChart"></canvas>
+        <canvas id="reviewCountsChart"></canvas> <!-- Новый элемент для диаграммы -->
+
+        <script>
+            console.log('{{ opts.model_name }}')
+
+            async function fetchOrderData(restaurantId) {
+                try {
+                    const response = await fetch(`/api/review-chart-data/${restaurantId}/`);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+            async function fetchReviewCountsData(restaurantId) { // Новая функция для получения данных
+                try {
+                    const response = await fetch(`/api/review-counts-by-restaurant/${restaurantId}/`);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+            // Код инициализации графика
+            async function initChart() {
+                let restaurantId;
+                const url = window.location.href;
+                const match = url.match(/\/restaurant\/(\d+)\/change\/$/);
+
+                if (match && match[1]) {
+                    restaurantId = match[1];
+                } else {
+                    alert('Ошибка: идентификатор ресторана не найден в URL.');
+                    return;
+                }
+
+                const data = await fetchOrderData(restaurantId); // Вызов функции fetchOrderData
+                const reviewCountsData = await fetchReviewCountsData(restaurantId); // Вызов новой функции
+
+                // Преобразование строки JSON в объект JavaScript
+                const chartDataObj = JSON.parse(data.chart_data);
+
+                // Инициализация графика
+                const ctx = document.getElementById('reviewStatsChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar', // Тип графика, например 'bar' или 'pie'
+                    data: chartDataObj, // Использование преобразованного объекта
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // Инициализация новой диаграммы для количества заказов с отзывами и без отзывов
+                const ctx2 = document.getElementById('reviewCountsChart').getContext('2d');
+                new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Заказы с отзывами', 'Заказы без отзывов'],
+                        datasets: [{
+                            data: [reviewCountsData.with_reviews, reviewCountsData.without_reviews],
+                            backgroundColor: ['#36A2EB', '#FF6384'],
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            }
+
+            initChart(); // Вызов функции initChart
+
+        </script>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Site{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'DeliveryDjango/bootstrap/css/bootstrap.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'DeliveryDjango/css/style.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static 'DeliveryDjango/bootstrap/js/bootstrap.js' %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
+            integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto"> <!-- Добавлено ms-auto для правого выравнивания -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'restaurant_list' %}">Рестораны</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link button" href="{% url 'view_cart' %}">Корзина</a>
+                    </li>
+                    {% if request.user.is_anonymous %}
+                        <!-- Отображаем кнопки для анонимных пользователей -->
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary" href="{% url 'login' %}">Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-success" href="{% url 'register' %}">Зарегистрироваться</a>
+                        </li>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_orders' %}">Мои заказы</a>
+                        </li>
+                        <!-- Отображаем кнопку для аутентифицированных пользователей -->
+                        <li class="nav-item">
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Выйти</button>
+                            </form>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main">
+    {% block content %}
+        <!-- Содержимое страницы будет вставлено здесь -->
+    {% endblock %}
+</main>
+
+<footer>
+    <!-- Подвал -->
+</footer>
+</body>
+</html>

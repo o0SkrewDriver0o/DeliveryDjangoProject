@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-center mt-3">
+        <h1 class="">Регистрация</h1>
+    </div>
+    <div class="center-screen">
+        <div class="login-form">
+            <h2 class="login-form-caption">{{ title }}</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="button-submit" type="submit" value="Зарегистрироваться">
+            </form>
+        </div>
+    </div>
+{% endblock %}

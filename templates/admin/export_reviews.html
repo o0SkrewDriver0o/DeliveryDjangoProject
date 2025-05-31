@@ -1,0 +1,8 @@
+{% extends "admin/base_generic.html" %}
+
+{% block content %}
+<h1>Export Reviews</h1>
+<form method="get" action="{% url 'export_reviews_to_excel' %}">
+    <button type="submit">Download Reviews in Excel</button>
+</form>
+{% endblock %}

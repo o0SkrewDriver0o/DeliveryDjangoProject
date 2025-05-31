@@ -1,0 +1,381 @@
+{ % extends "admin/base_site.html" %
+} { % load i18n admin_urls static admin_list %
+}
+{ % block extrastyle %
+} {
+  {
+    block.super
+  }
+} < link rel = "stylesheet"
+href = "{% static "
+admin / css / changelists.css " %}" > { %
+  if cl.formset %
+} < link rel = "stylesheet"
+href = "{% static "
+admin / css / forms.css " %}" > { % endif %
+} { %
+  if cl.formset or action_form %
+} < script src = "{% url 'admin:jsi18n' %}" > < /script> { % endif %
+} {
+  {
+    media.css
+  }
+} { %
+  if not actions_on_top and not actions_on_bottom %
+} < style > #changelist table thead th: first - child {
+  width: inherit
+} < /style> { % endif %
+} { % endblock %
+}
+{ % block extrahead %
+} {
+  {
+    block.super
+  }
+} {
+  {
+    media.js
+  }
+} < script src = "{% static 'admin/js/filters.js' %}"
+defer > < /script> { % endblock %
+}
+{ % block bodyclass %
+} {
+  {
+    block.super
+  }
+}
+app - {
+  {
+    opts.app_label
+  }
+}
+model - {
+  {
+    opts.model_name
+  }
+}
+change - list { % endblock %
+}
+{ %
+  if not is_popup %
+} { % block breadcrumbs %
+} < div class = "breadcrumbs" >
+  < a href = "{% url 'admin:index' %}" > { % translate 'Home' %
+  } < /a> & rsaquo; < a href = "{% url 'admin:app_list' app_label=cl.opts.app_label %}" > {
+  {
+    cl.opts.app_config.verbose_name
+  }
+} < /a> & rsaquo; {
+  {
+    cl.opts.verbose_name_plural | capfirst
+  }
+} < /div> { % endblock %
+} { % endif %
+}
+{ % block coltype %
+} { % endblock %
+}
+{ % block content %
+} < div id = "content-main" > { % block object - tools %
+} < ul class = "object-tools" > { % block object - tools - items %
+} { % change_list_object_tools %
+} { % endblock %
+} < /ul> { % endblock %
+} { %
+  if cl.formset and cl.formset.errors %
+} < p class = "errornote" > { % blocktranslate count counter = cl.formset.total_error_count %
+}
+Please correct the error below. { % plural %
+}
+Please correct the errors below. { % endblocktranslate %
+} < /p> {
+  {
+    cl.formset.non_form_errors
+  }
+} { % endif %
+} < div class = "module{% if cl.has_filters %} filtered{% endif %}"
+id = "changelist" >
+  < div class = "changelist-form-container" > { % block search %
+  } { % search_form cl %
+  } { % endblock %
+  } { % block date_hierarchy %
+  } { %
+    if cl.date_hierarchy %
+  } { % date_hierarchy cl %
+  } { % endif %
+  } { % endblock %
+  }
+< form id = "changelist-form"
+method = "post" { %
+  if cl.formset and cl.formset.is_multipart %
+}
+enctype = "multipart/form-data" { % endif %
+}
+novalidate > { % csrf_token %
+} { %
+  if cl.formset %
+} < div > {
+  {
+    cl.formset.management_form
+  }
+} < /div> { % endif %
+}
+{ % block result_list %
+} { %
+  if action_form and actions_on_top and cl.show_admin_actions %
+} { % admin_actions %
+} { % endif %
+} { % result_list cl %
+} { %
+  if action_form and actions_on_bottom and cl.show_admin_actions %
+} { % admin_actions %
+} { % endif %
+} { % endblock %
+} { % block pagination %
+} { % pagination cl %
+} { % endblock %
+} < /form> < /div> { % block filters %
+} { %
+  if cl.has_filters %
+} < div id = "changelist-filter" >
+  < h2 > { % translate 'Filter' %
+  } < /h2> < form id = "changelist-filter"
+method = "get" >
+  < select name = "restaurant" >
+  < option value = "all" { %
+    if selected_filter_value == 'all' %
+  }
+selected { % endif %
+} > -- - Select Restaurant-- - < /option> { %
+  for restaurant_id, restaurant_name in cl.filter_specs .0.choices %
+} < option value = "{{ restaurant_id }}" { %
+  if selected_filter_value == restaurant_id %
+}
+selected { % endif %
+} > {
+  {
+    restaurant_name
+  }
+} < /option> { % endfor %
+} < /select> < input type = "submit"
+value = "{% translate 'Filter' %}" >
+  < /form> < br > { %
+    if cl.is_facets_optional or cl.has_active_filters %
+  } < div id = "changelist-filter-extra-actions" > { %
+    if cl.is_facets_optional %
+  } < h3 > { %
+    if cl.add_facets %
+  } < a href = "{{ cl.remove_facet_link }}"
+class = "hidelink" > { % translate "Hide counts" %
+} < /a> { %
+  else %
+} < a href = "{{ cl.add_facet_link }}"
+class = "viewlink" > { % translate "Show counts" %
+  } < /a>{% endif %} < /h3>{% endif %} { %
+    if cl.has_active_filters %
+  } < h3 >
+  < a href = "{{ cl.clear_all_filters_qs }}" > & #10006; {% translate "Clear all filters" %}</a>
+                                </h3>{% endif %}
+                            </div>{% endif %}
+                        {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+
+    {% if opts.model_name = = 'restaurant' %
+} < div >
+  < canvas id = "allRestaurantsChart" > < /canvas> < /div> < div >
+  < canvas id = "reviewStatsChart" > < /canvas> < /div> < div style = "height: 600px; width: 800px;" >
+  < canvas id = "restaurantsWithReviewsChart" > < /canvas> < /div> < div >
+  < canvas id = "ordersByRestaurantChart" > < /canvas> < /div> < div >
+  < h2 > Топ ресторанов по отзывам < /h2> < ul id = "topRestaurantsList" > < /ul> < /div> < script src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" > < /script> < script >
+  async function fetchAllRestaurantsReviewData() {
+    try {
+      const response = await fetch('/api/all-restaurants-review-stats/');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+async function fetchOrderData(restaurantId) {
+  try {
+    const response = await fetch(`/api/review-chart-data/${restaurantId}/`);
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+async function fetchRestaurantsWithReviewsData() {
+  try {
+    const response = await fetch('/api/restaurants-with-reviews-stats/');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+async function fetchOrdersByRestaurantData() {
+  try {
+    const response = await fetch('/api/orders-by-restaurant-stats/');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+async function fetchTopRestaurantsByReviews() {
+  try {
+    const response = await fetch('/api/top-restaurants-by-reviews/');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+// Код инициализации графика среднего рейтинга по ресторанам
+async function initAllRestaurantsChart() {
+  const data = await fetchAllRestaurantsReviewData();
+  console.log(data);
+  const ctx = document.getElementById('allRestaurantsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          display: true,
+          title: {
+            display: true,
+            text: 'Ресторан'
+          }
+        },
+        y: {
+          display: true,
+          title: {
+            display: true,
+            text: 'Средний рейтинг'
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+// Код инициализации графика среднего рейтинга доставки, интенсивности вкуса и качества продуктов
+async function initReviewStatsChart() {
+  let restaurantId;
+  const url = window.location.href;
+  const match = url.match(/\/restaurant\/(\d+)\/change\/$/);
+  if (match && match[1]) {
+    restaurantId = match[1];
+  } else {
+    alert('Ошибка: идентификатор ресторана не найден в URL.');
+    return;
+  }
+  const data = await fetchOrderData(restaurantId);
+  const chartDataObj = JSON.parse(data.chart_data);
+  const ctx = document.getElementById('reviewStatsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: chartDataObj,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+// Код инициализации круговой диаграммы для ресторанов с отзывами и без отзывов
+async function initRestaurantsWithReviewsChart() {
+  const data = await fetchRestaurantsWithReviewsData();
+  const ctx = document.getElementById('restaurantsWithReviewsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Рестораны с отзывами', 'Рестораны без отзывов'],
+      datasets: [{
+        data: [data.with_reviews, data.without_reviews],
+        backgroundColor: ['#36A2EB', '#FF6384'],
+      }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+}
+// Код инициализации столбчатой диаграммы для количества заказов по ресторанам 
+async function initOrdersByRestaurantChart() {
+  const data = await fetchOrdersByRestaurantData();
+  const ctx = document.getElementById('ordersByRestaurantChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.labels, // Используем метки из данных API
+      datasets: [{
+        label: 'Число заказов',
+        data: data.datasets[0].data,
+        backgroundColor: data.datasets[0].backgroundColor,
+        borderColor: data.datasets[0].borderColor,
+        borderWidth: data.datasets[0].borderWidth
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          display: true,
+          title: {
+            display: true,
+            text: 'Ресторан'
+          },
+          ticks: {
+            callback: function(value) {
+              return data.labels[value]; // Отображаем названия ресторанов по оси X
+            }
+          }
+        },
+        y: {
+          display: true,
+          title: {
+            display: true,
+            text: 'Число заказов'
+          },
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            callback: function(value) {
+              return Math.floor(value) === value ? value : '';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+// Код инициализации списка топ-3 ресторанов
+async function initTopRestaurantsList() {
+  const data = await fetchTopRestaurantsByReviews();
+  const topRestaurantsList = document.getElementById('topRestaurantsList');
+  data.forEach(restaurant => {
+    const li = document.createElement('li');
+    li.textContent = `${restaurant.name}: ${restaurant.total_reviews} отзывы, ${restaurant.sum_rating} общий рейтинг`;
+    topRestaurantsList.appendChild(li);
+  });
+}
+initAllRestaurantsChart();
+initReviewStatsChart();
+initRestaurantsWithReviewsChart();
+initOrdersByRestaurantChart();
+initTopRestaurantsList(); < /script> { % endif %
+} < h1 > Экспорт отзывов < /h1> < form method = "get"
+action = "{% url 'export_reviews_to_excel' %}" >
+  < button type = "submit" > Скачать статистику по отзывам < /button> < /form>
+{ % endblock %
+}

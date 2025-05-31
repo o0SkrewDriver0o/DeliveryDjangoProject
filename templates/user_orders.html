@@ -1,0 +1,39 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Мои заказы</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Дата заказа</th>
+                <th scope="col">Способ оплаты</th>
+                <th scope="col">Общая стоимость</th>
+                <th scope="col">Отзыв</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ order.created_at|date:"d.m.Y, H:i" }}</td>
+                    <td>{{ order.get_payment_method_display }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>
+                        {% if order.have_review %}
+                            Спасибо за отзыв
+                        {% else %}
+                            <a href="{% url 'rate_order' order.id %}" class="btn btn-sm btn-primary">Оценить</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">У вас пока нет заказов.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

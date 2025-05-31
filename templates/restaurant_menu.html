@@ -1,0 +1,37 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mb-4">Меню ресторана</h1>
+        {% for category_name, dishes in grouped_dishes_by_category.items %}
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <h3>{{ category_name }}</h3>
+                </div>
+            </div>
+            <div class="row">
+                {% for dish in dishes %}
+                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'dish_detail_page' dish.pk %}">{{ dish.title }}</a>
+                                </h5>
+                                <p class="card-text">{{ dish.descr }}</p>
+                                <a href="{% url 'add_to_cart' dish.pk %}" class="btn btn-primary">Добавить в корзину</a>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <span class="badge bg-primary rounded-pill">
+                                    {% if dish.availability == 0 %}
+                                        (Не доступно)
+                                    {% else %}
+                                        {{ dish.price }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

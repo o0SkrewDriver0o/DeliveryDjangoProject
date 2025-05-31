@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="my-4">Ваша корзина</h1>
+        {% if cart_items %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Название</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Цена</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cd in cart_items %}
+                    <tr>
+                        <td>{{ cd.item.title }}</td>
+                        <td>{{ cd.quantity }}</td>
+                        <td>{{ cd.item.price }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">Ваша корзина пуста.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p class="fs-4">Общая стоимость: {{ total_price }}</p>
+            <a href="{% url 'order' %}" class="btn btn-primary">Оформить заказ</a>
+        {% else %}
+            <p class="fs-4">Ваша корзина пуста.</p>
+        {% endif %}
+    </div>
+{% endblock %}

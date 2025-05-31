@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+{% block content %}
+    <div class="container card">
+        <h1 class="pt-4">{{ dish.name }}</h1>
+        <img class="img-fluid w-25" src="{{ dish.pic.url }}">
+        <p>{{ dish.descr }}</p>
+        <p>{{ dish.price }}</p>
+        <button type="button" class="btn btn-primary">Добавить в корзину</button>
+    </div>
+
+{% endblock content %}

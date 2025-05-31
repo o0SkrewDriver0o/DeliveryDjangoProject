@@ -1,0 +1,226 @@
+/* General styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Login form */
+.login-form {
+    max-width: 500px;
+    padding: 2em;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.login-form-caption {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+
+.login-form input[type="text"], .login-form input[type="password"], .login-form input[type="email"] {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.email-field {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.login-form input[type="submit"] {
+    width: auto;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6em 2em;
+    cursor: pointer;
+}
+
+.login-form input[type="submit"]:hover {
+    background-color: #1a52a5;
+}
+
+.login-form .errorlist {
+    color: red;
+    list-style: none;
+    text-align: justify;
+    padding: 0;
+}
+
+.center-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.button-submit {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto !important;
+}
+
+/* Profile navigations */
+.profile-nav {
+    display: flex;
+    padding: 20px;
+    margin-top: -8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    background-color: #1976d2;
+    color: white;
+}
+
+.nav-username {
+    font-weight: bold;
+}
+  
+.nav-items {
+    margin-left: auto;
+}
+
+.profile-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+  
+.profile-nav li {
+    margin: 0 30px;
+}
+  
+.profile-nav a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Reports cards */
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin-bottom: 1em;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+.card-header {
+    background-color: #eee;
+    padding: 0.5em 1em;
+}
+
+.card-title {
+    margin: 0;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 0.5em 1em;
+}
+
+.card-footer {
+    background-color: #eee;
+    padding: 0.5em 1em;
+    text-align: right;
+}
+
+.card-link {
+    color: #1976d2;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+}
+
+/* Report Form */
+.grid-container-4 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.grid-container-2 {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.grid-head {
+    border: 1px solid gray;
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.grid-value {
+    border: 1px solid gray;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+/* Report tabs */
+.partition-shown {
+    display: block;
+}
+
+.partition-hidden {
+    display: none;
+}
+
+.tab {
+    overflow: hidden;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.tab button {
+    font-size: 0.9em;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+#grid {
+  display: grid;
+  height: 200px;
+  grid-template-columns: 200px;
+  grid-template-rows: repeat(6, 1fr);
+}
+
+#item1 {
+  background-color: lime;
+}
+
+#item2 {
+  background-color: yellow;
+  grid-row: 2 / 4;
+}
+
+#item3 {
+  background-color: blue;
+  grid-row: span 2 / 7;
+}
